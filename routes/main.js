@@ -8,7 +8,7 @@ const { login, dashboard } = require("../controllers/main")
 
 // alt aka option one router.get("/dashboard", dashboard)
 router.route("/dashboard").get(dashboard);
-router.route("/login").get(login);
+router.route("/login").post(login);
 
 
 module.exports = router
