@@ -1,29 +1,39 @@
-require('dotenv').config();
-require('express-async-errors');
-
-const express = require('express');
+const express = require("express");
 const app = express();
 
-const notFoundMiddleware = require('./middleware/not-found');
-const errorHandlerMiddleware = require('./middleware/error-handler');
+require("dotenv").config();
+require("express-async-errors");
+
+const notFoundMiddleWare = require("./middleware/not-found");
+const errorHandlerMiddleWare = require("./middleware/error-handler");
+
+/* router */
+const mainRouter = require("./routes/main");
 
 // middleware
-app.use(express.static('./public'));
+
+// load static folder
+app.use(express.static("./public"));
+
+// get json and query strings
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
-app.use(notFoundMiddleware);
-app.use(errorHandlerMiddleware);
+// routes and 404
+app.use("/api/v1", mainRouter);
+app.use(notFoundMiddleWare);
 
-const port = process.env.PORT || 3000;
+// error handler
+app.use(errorHandlerMiddleWare);
+
+const PORT = process.env.PORT || 5000;
 
 const start = async () => {
     try {
-        app.listen(port, () =>
-            console.log(`Server is listening on port ${port}...`)
-        );
-    } catch (error) {
-        console.log(error);
+        app.listen(PORT, () => console.log(`Server is running on port: ${PORT}...`))
+    } catch(e) {
+        console.log(e)
     }
-};
+}
 
 start();
