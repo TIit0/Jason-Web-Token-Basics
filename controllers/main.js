@@ -18,12 +18,12 @@ async function login(req, res) {
     const id = new Date().getDate() + Math.random();
     console.log(id)
 
+
     const token = jwt.sign({id, username}, process.env.JWT_SECRET, {expiresIn: "30d"})
     return res.status(200).json({msg: `user created`, token})
 }
 
 async function dashboard(req, res) {
-    const {user = "eddy"} = req.query
     const authHeader = req.headers.authorization
     
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -31,9 +31,17 @@ async function dashboard(req, res) {
     }
 
     const token = authHeader.split("Bearer ").pop()
-    console.log(token)
     const luckyNumber = Math.floor(Math.random()*100);
-    return res.status(200).json({msg: `hello ${user}`, secret: `Here is your authorized data, your lucky nmber is ${luckyNumber} `})
+
+    try {
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        return res.status(200).json({msg: `hello ${decodedToken.username}`, secret: `Here is your authorized data, your lucky nmber is ${luckyNumber} `});
+
+    } catch(e) {
+        throw new CustomAPIError("Unathorized", 401);
+    }
+
+    
 }
 
 module.exports = {login, dashboard}
