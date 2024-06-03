@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const CustomAPIError = require("../errors/custom-error");
+const {BadRequest} = require("../errors")
 
 
 
@@ -11,7 +11,7 @@ async function login(req, res) {
     // controller check as shown below
 
     if (username.trim() === "" || password.trim() === "") {
-        throw new CustomAPIError("user and password cannot be blank", 400)
+        throw new BadRequest("user and password cannot be blank")
     }
 
     // just for learning, this us ussually provided by the DataBase
