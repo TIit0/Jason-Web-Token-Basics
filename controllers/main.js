@@ -25,7 +25,7 @@ async function login(req, res) {
 
 async function dashboard(req, res) {
 
-    console.log("user obj", req.user);
+    console.log("user obj", req.user); // req comes from middleware via next() |  req.user is attached at auth middleware |
 
     const luckyNumber = Math.floor(Math.random() * 100);
     return res.status(200).json({ msg: `hello ${req.user.username}`, secret: `Here is your authorized data, your lucky nmber is ${luckyNumber} ` });
