@@ -14,11 +14,11 @@ const authenticationMiddleware = async (req, res, next) => {
 
     try {
         // verify jason web token and decode, if token is correct add it to req object and pass it to next function.
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // jwt.verify(userToken, secret/aka decryption key)
         console.log("decoded token",decodedToken)
         const {id, username} = decodedToken
-        req.user = {id, username}
-        next();
+        req.user = {id, username} // attach decoded user and id to request
+        next(); // call next method to continue and pass modified request
 
     } catch(e) {
         throw new UnAuthenticated("Unathorized");
